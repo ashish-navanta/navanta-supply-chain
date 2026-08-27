@@ -91,7 +91,6 @@ function CompactLogo() {
       style={{
         height: 28,
         width: "auto",
-        marginTop: 4,
         transform: "translateX(2px)",
       }}
     />
