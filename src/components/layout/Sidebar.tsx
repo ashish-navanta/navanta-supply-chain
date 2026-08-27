@@ -49,8 +49,8 @@ function withBadge(Glyph: Icon, value: number) {
                available at this size, and unmistakably light against the
                ground. */
             style={{
-              background: "#FFFFFF",
-              color: "var(--nav-brand)",
+              background: "var(--nav-brand)",
+              color: "#FFFFFF",
               fontVariantNumeric: "tabular-nums",
             }}
           >
@@ -68,16 +68,16 @@ function withBadge(Glyph: Icon, value: number) {
 /**
  * Full Navanta lockup — the expanded panel.
  *
- * The white cut. The rail carries the brand gradient now, and the dark logo
- * the top bar carries would all but vanish on it.
+ * The full dark lockup keeps the brand visible against the white navigation
+ * surface.
  */
 function FullLogo() {
   return (
     <img
-      src="/navanta-logo-white.svg"
+      src="/navanta-logo.svg"
       alt="Navanta"
       className="px-1"
-      style={{ height: 20, width: "auto" }}
+      style={{ height: 32, width: "auto" }}
     />
   );
 }
@@ -112,7 +112,7 @@ function ExpandRail({ onExpand }: { onExpand: () => void }) {
       title="Expand navigation"
       className="flex size-9 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-[var(--sidebar-hover-bg)]"
     >
-      <SidebarSimple size={18} weight="bold" color="#FFFFFF" />
+      <SidebarSimple size={18} weight="bold" color="var(--nav-brand)" />
     </button>
   );
 }

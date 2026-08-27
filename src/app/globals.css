@@ -223,16 +223,11 @@ label:has(input.choice-card):hover:not(:has(:checked)) {
 }
 
 :root {
-  /** Navanta's chrome — the brand's deep blue, the dark end of the lockup's
-      gradient. Solid where a solid is needed (badge numerals, the collapse
-      arrow); the rail itself carries the full blue→purple gradient below,
-      which is the same ramp the design system's primary CTA and section
-      backgrounds use, so the rail reads as the company rather than as a
-      generic dark UI. */
+  /** Navanta's chrome accent, used for compact controls on the white rail. */
   --nav-brand: #1d4a86;
 }
 
-/* ─── The navigation rail, in Navanta's brand gradient ───────────────────
+/* ─── The navigation rail, on a white surface ─────────────────────────────
    The DS
    SideNav is built entirely on tokens, so the rail is re-themed by redefining
    them on the two elements that draw it — the collapsed rail and the expanded
@@ -245,28 +240,22 @@ label:has(input.choice-card):hover:not(:has(:checked)) {
    repaint every card on every page. Everything outside the rail stays iris. */
 aside.w-12,
 .w-64.z-50.border-r {
-  --surface-base: var(--nav-brand);
-  --surface-raised: var(--nav-brand);
-  --surface-chrome: var(--nav-brand);
-  /* The brand ramp itself, drawn top-to-bottom so the tall rail carries the
-     full blue→purple sweep. background-image sits over the token-driven
-     background-color, which stays as the fallback. */
-  background-image: linear-gradient(180deg, #1d4a86 0%, #3d348b 100%);
-  /* Separators and rings read as light-on-dark now, so they are drawn from the
-     foreground rather than from the neutral border ramp. */
-  --border-default: rgba(255, 255, 255, 0.18);
-  --ds-border-default: rgba(255, 255, 255, 0.18);
-  --border-strong: rgba(255, 255, 255, 0.42);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.72);
-  --ds-text-primary: #ffffff;
-  --ds-text-secondary: rgba(255, 255, 255, 0.72);
-  --foreground: #ffffff;
-  /* Tinted white rather than a second brown, so the active row keeps its
-     contrast against the rail whatever the rail's exact value is. */
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
-  --sidebar-active-bg: rgba(255, 255, 255, 0.16);
-  --ds-surface-active: rgba(255, 255, 255, 0.16);
+  --surface-base: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-chrome: #ffffff;
+  background-color: #ffffff;
+  background-image: none;
+  --border-default: #e4e4e7;
+  --ds-border-default: #e4e4e7;
+  --border-strong: #d4d4d8;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --ds-text-primary: #18181b;
+  --ds-text-secondary: #52525b;
+  --foreground: #18181b;
+  --sidebar-hover-bg: #f5f5f5;
+  --sidebar-active-bg: #edf4f7;
+  --ds-surface-active: #edf4f7;
 }
 
 /* The DS's collapse handle, which straddles the boundary.
