@@ -280,12 +280,11 @@ button[aria-label="Collapse navigation"] svg {
 }
 
 /* The active icon is filled from a gradient whose stops are declared in a
-   hidden <svg> sitting OUTSIDE the rail, so it resolves these against the page
-   rather than against the rail. Without this the current page's icon stays
-   near-black on the dark ground — the one icon that most needs to be legible. */
+   hidden <svg> sitting OUTSIDE the rail, so keep its foreground aligned with
+   the dark-on-white navigation treatment. */
 svg[aria-hidden="true"][width="0"] {
-  --foreground: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.72);
+  --foreground: #18181b;
+  --text-secondary: #52525b;
 }
 
 /* A queue row that has just been created.
