@@ -1,0 +1,679 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Force-generate the responsive display utilities the design-system SideNav
+   relies on (rail = `hidden md:flex`). The DS ships these in its own
+   styles.css, but that loads BEFORE this file, and globals regenerates the
+   unconditional `.hidden` — which would otherwise win over the DS's earlier
+   `@media md{.md:flex}` at ≥768px and hide the collapsed nav rail. */
+@source inline("hidden md:flex max-md:flex max-md:flex-col md:flex-row md:hidden");
+
+/* Same problem, same fix, for the DS KpiGrid — it lays its cards out with
+   `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`, and without these
+   the responsive variants never reach the stylesheet, so every KPI row rendered
+   as a single stacked column. */
+@source inline("grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4");
+
+/* Same trap a third time, and this one hid a whole feature: the DS Toast
+   animates from `opacity-0 scale-[0.98]` plus a per-position offset to
+   `opacity-100 translate-x-0 translate-y-0 scale-100`. Without these the
+   opacity-100 never reaches the stylesheet, the unconditional `opacity-0` from
+   this file's regenerated layer wins, and every toast in the app renders into
+   the DOM completely invisible — which is exactly what was happening. */
+@source inline("opacity-0 opacity-100 scale-100 translate-x-0 translate-y-0 -translate-y-2 translate-y-2 -translate-y-3 translate-y-3 sm:translate-x-6 sm:-translate-x-6 sm:translate-y-0 top-0 right-0 left-0 bottom-0 items-end items-start items-center flex-col-reverse");
+
+
+@theme inline {
+  --color-background: var(--surface-page);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  /* Shadcn-style aliases used by `@navanta-ai/design-system` (Avatar fallback
+   * bg, etc.). Point them at the closest tokens we already have so DS
+   * components inherit our palette without a parallel theme system. */
+  --color-muted: var(--color-neutral-100);
+  --color-muted-foreground: var(--ds-text-secondary);
+}
+
+body {
+  background: var(--gradient-page-bg);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* The DS `underline-pill` Tabs variant paints its active count badge with
+   this class. Ported from IRIS, where it is defined the same way. */
+.gradient-badge {
+  background: var(--gradient-badge);
+}
+
+/* DS Radio cards on the agent-summary band. The DS hovers them with
+   `bg-accent/40` — a 40% wash of #F4F4F5, which against the lavender band is
+   near enough the band colour that the card dissolves into it. Hold the
+   surface still and let the border carry the affordance instead. These rules
+   are unlayered, so they beat the Tailwind utility layer without !important;
+   the `:not(:has(:checked))` guard leaves the selected card's border alone. */
+label:has(input.choice-card):hover {
+  background: var(--surface-base);
+}
+label:has(input.choice-card):hover:not(:has(:checked)) {
+  border-color: var(--ds-border-interactive);
+}
+
+/* Detail-panel section rules. Tailwind's `divide-y` utilities measure 0px in
+   this build, and its `divide` colour resolves to the theme's near-black border
+   — so the separator is declared here instead: unlayered, one subtle rule
+   between sections, none above the first. */
+.detail-card > * + * {
+  border-top: 1px solid var(--ds-border-subtle);
+}
+
+/* Thread accordions. The caret turns to show state, and a closed entry hides
+   its cited-figure bar along with the body — the star on the summary row is what
+   survives, so a quoted exchange is still findable while closed. */
+.thread-caret {
+  transition: transform 0.15s ease-out;
+}
+.thread-entry[open] .thread-caret {
+  transform: rotate(180deg);
+}
+.thread-entry:not([open]) > div {
+  display: none;
+}
+
+/* Agent-run steps. Same disclosure mechanics as the thread accordions: the
+   caret turns to show state, and Safari's default summary marker is removed
+   (Tailwind's `list-none` alone does not reach the -webkit pseudo-element). */
+.step-entry > summary::-webkit-details-marker {
+  display: none;
+}
+.step-entry .step-caret {
+  transition: transform 0.15s ease-out;
+}
+.step-entry[open] .step-caret {
+  transform: rotate(90deg);
+}
+
+/* The tracking card when its state changes under the reader. One card updates
+   in place rather than a second being pushed below it, so this ring is what
+   says the line moved — it fades out on its own and leaves nothing behind. */
+@keyframes po-card-settle {
+  0%   { box-shadow: 0 0 0 3px var(--color-iris-200); }
+  100% { box-shadow: 0 0.5px 2px rgba(0,0,0,0.15); }
+}
+.po-card-changed {
+  animation: po-card-settle 1600ms ease-out both;
+}
+
+/* The agent panel as an overlay — it slides in from the edge it lives on
+   rather than fading, because a floating panel that fades reads as a modal and
+   a modal implies the page behind it is blocked. It is not. */
+@keyframes chat-overlay-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes chat-overlay-out {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+.chat-overlay-in {
+  animation: chat-overlay-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.chat-overlay-out {
+  animation: chat-overlay-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+/* The rail arrives after the panel has left, so it fades rather than sliding —
+   two things sliding from the same edge at once reads as one thing stuttering. */
+@keyframes chat-rail-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.chat-rail-in {
+  animation: chat-rail-in 180ms ease-out both;
+}
+
+/* ── Transcript ───────────────────────────────────────────────────────────
+   Nothing in the transcript may shrink.
+   It is a scrolling flex column, and a flex child's default is to compress to
+   fit rather than overflow — so a tall card met a short panel by shrinking
+   itself, and because these cards clip their own overflow the result was a
+   cropped card and a container reporting no overflow to scroll. The claim flow
+   showed it worst: pick a delivery on a laptop and the damage-type list was
+   simply cut off with no way to reach the rest.
+   Fixed here rather than with `shrink-0` on each card, because it is a property
+   of the container — every card added later inherits the fix instead of
+   rediscovering the bug. */
+.chat-transcript > * {
+  flex-shrink: 0;
+}
+
+/* Every card arrives, rather than appearing.
+   The panel is a transcript: things are pushed into it while the reader is
+   watching, and a card that is simply THERE on the next frame reads as the page
+   having jumped rather than as the agent having said something. A short rise
+   into place is the difference between a list that changed and a conversation
+   that continued — and it tells the eye where to look, which matters most for
+   the outcome card, the one thing in the run somebody has to read.
+
+   On the children rather than in each component: the transcript pushes a dozen
+   kinds of card and they should all enter the same way. A CSS animation runs
+   once when the element mounts, so appended cards animate and the ones already
+   on screen do not re-animate underneath them.
+
+   `both` holds the final frame, so a card whose animation is interrupted by a
+   re-render does not snap back to transparent. */
+@keyframes chat-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.chat-transcript > * {
+  animation: chat-card-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Motion is decoration here — the transcript is legible without it, and someone
+   who has asked the OS for less movement is telling us that a panel of things
+   sliding is the problem rather than the point. */
+@media (prefers-reduced-motion: reduce) {
+  .chat-transcript > * {
+    animation: none;
+  }
+  .call-turn {
+    animation: none;
+  }
+  .call-live-bar {
+    animation: none;
+  }
+  tr {
+    animation: none;
+  }
+}
+
+/* The composer. Its border lives here rather than inline so `:focus-within`
+   can win — the DS input inside carries `border-0`, so its own focus ring had
+   nothing to draw on and typing into the panel showed no focus at all. The
+   wrapper is the control as far as the eye is concerned, so the wrapper is what
+   lights up. */
+.chat-composer {
+  border: 1px solid var(--ds-border-default);
+  transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+.chat-composer:focus-within {
+  /* Neutral. Iris is the agent's colour in this app — on the panel, the star,
+     the settled outcome — and spending it on a focus ring would make a cursor
+     landing in a text box look like the agent doing something. */
+  border-color: var(--ds-text-primary);
+  box-shadow: 0 0 0 3px var(--color-neutral-200, #e4e4e7);
+}
+
+:root {
+  /** Navanta's chrome — the brand's deep blue, the dark end of the lockup's
+      gradient. Solid where a solid is needed (badge numerals, the collapse
+      arrow); the rail itself carries the full blue→purple gradient below,
+      which is the same ramp the design system's primary CTA and section
+      backgrounds use, so the rail reads as the company rather than as a
+      generic dark UI. */
+  --nav-brand: #1d4a86;
+}
+
+/* ─── The navigation rail, in Navanta's brand gradient ───────────────────
+   The DS
+   SideNav is built entirely on tokens, so the rail is re-themed by redefining
+   them on the two elements that draw it — the collapsed rail and the expanded
+   panel — rather than by overriding a dozen individual rules. Custom properties
+   inherit down the DOM, so the icons, dividers, hover and active states and the
+   user row all follow from these.
+
+   Scoped to those two elements rather than :root deliberately: `--surface-base`
+   and `--text-secondary` are app-wide tokens, and setting them globally would
+   repaint every card on every page. Everything outside the rail stays iris. */
+aside.w-12,
+.w-64.z-50.border-r {
+  --surface-base: var(--nav-brand);
+  --surface-raised: var(--nav-brand);
+  --surface-chrome: var(--nav-brand);
+  /* The brand ramp itself, drawn top-to-bottom so the tall rail carries the
+     full blue→purple sweep. background-image sits over the token-driven
+     background-color, which stays as the fallback. */
+  background-image: linear-gradient(180deg, #1d4a86 0%, #3d348b 100%);
+  /* Separators and rings read as light-on-dark now, so they are drawn from the
+     foreground rather than from the neutral border ramp. */
+  --border-default: rgba(255, 255, 255, 0.18);
+  --ds-border-default: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.42);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --ds-text-primary: #ffffff;
+  --ds-text-secondary: rgba(255, 255, 255, 0.72);
+  --foreground: #ffffff;
+  /* Tinted white rather than a second brown, so the active row keeps its
+     contrast against the rail whatever the rail's exact value is. */
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
+  --sidebar-active-bg: rgba(255, 255, 255, 0.16);
+  --ds-surface-active: rgba(255, 255, 255, 0.16);
+}
+
+/* The DS's collapse handle, which straddles the boundary.
+   It hangs off the expanded panel's right edge, so it is a child of the panel
+   and inherits the overrides above — which made it dark-on-dark, and worse,
+   translucent on hover: `--sidebar-hover-bg` is a tinted white, right for a row
+   inside the rail and wrong for a disc that has the page behind it. Hovering it
+   turned the button into a hole.
+
+   So it opts out. Solid white with a dark arrow, the way the DS drew it before
+   the rail was re-themed: it sits half on the rail and half on the page, and
+   white is the one fill that reads as a control against both. */
+button[aria-label="Collapse navigation"] {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+button[aria-label="Collapse navigation"]:hover {
+  background: var(--color-neutral-100, #f4f4f5) !important;
+}
+button[aria-label="Collapse navigation"] svg {
+  color: var(--nav-brand) !important;
+}
+
+/* The active icon is filled from a gradient whose stops are declared in a
+   hidden <svg> sitting OUTSIDE the rail, so it resolves these against the page
+   rather than against the rail. Without this the current page's icon stays
+   near-black on the dark ground — the one icon that most needs to be legible. */
+svg[aria-hidden="true"][width="0"] {
+  --foreground: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+}
+
+/* A queue row that has just been created.
+   Filing a claim in the panel adds a line to the table beside it, and the
+   reader is looking at the panel when it lands. Without the arrival the table
+   is simply one row longer than it was, which reads as a list they
+   mis-remembered rather than as work they just did. Stilled by the
+   reduced-motion block above. */
+@keyframes queue-row-arrive {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* A live call. The record dot breathes while the line is open, and each turn
+   lands rather than appearing — the transcript is being written as you read it,
+   which is the whole reason it arrives live instead of whole. Both are stilled
+   by the reduced-motion block above. */
+@keyframes call-rec-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.72); }
+}
+.call-rec {
+  animation: call-rec-pulse 1200ms ease-in-out infinite;
+}
+/* A line that is genuinely open. Where the call is real its length is unknown,
+   so the wave cannot be a progress bar filling toward an end nobody knows —
+   it breathes instead, which says "audio is happening" without claiming to know
+   how much is left. Staggered per bar so it reads as speech rather than as one
+   object scaling. */
+@keyframes call-wave {
+  0%, 100% { transform: scaleY(0.32); }
+  50%      { transform: scaleY(1); }
+}
+.call-live-bar {
+  transform-origin: center;
+  animation: call-wave 900ms ease-in-out infinite;
+}
+
+@keyframes call-turn-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.call-turn {
+  animation: call-turn-in 260ms ease-out both;
+}
+
+/* A turn you can jump to. Where the card has real audio each turn is a seek
+   control, and the underline on hover is what says so — the tint already means
+   "being spoken now", so it cannot also mean "clickable" without the two
+   readings colliding. Underlining the words rather than the block keeps the
+   affordance on the thing being pointed at. */
+.call-turn-seek:hover .call-turn-text,
+.call-turn-seek:focus-visible .call-turn-text {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ─── DESIGN-SYSTEM NAMED TEXT STYLES ─────────────────────────────────────
+   The DS's named styles, exactly as the Figma specifies them:
+     Body Medium  Geist 14 / 22 · 500
+     Body         Geist 14 / 22 · 400
+     Label        Geist 12 / 18 · 400
+   These exist alongside the older `.type-*` scale below, which approximates the
+   same styles with a 1.5 line-height (21px) and a 500-weight caption. Because
+   every class in this file is UNLAYERED, it outranks Tailwind's layered
+   utilities — so `type-caption font-normal` and `leading-[22px]` are silently
+   ignored on top of a `.type-*` class. Use these when the spec matters. */
+.ds-body-medium {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 500;
+}
+.ds-body {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+}
+.ds-label {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+}
+
+/* ─── TYPOGRAPHY CLASSES ──────────────────────────────────────── */
+
+.type-badge {
+  font-size: var(--type-badge);
+  font-weight: 500;
+}
+
+.type-overline {
+  font-size: var(--type-overline);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.type-footnote {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.type-caption {
+  font-size: var(--type-caption);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.type-cell {
+  font-size: var(--type-cell);
+  font-weight: 400;
+  line-height: 1.42;
+  letter-spacing: 0.01em;
+}
+
+.type-cell-medium {
+  font-size: var(--type-cell);
+  font-weight: 500;
+  line-height: 1.42;
+  letter-spacing: 0.01em;
+}
+
+.type-body {
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.type-body-medium {
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.type-body-semibold {
+  font-size: var(--type-body);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.type-subheading {
+  font-size: var(--type-subheading);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.type-title {
+  font-size: var(--type-title);
+  font-weight: 600;
+  line-height: 1.44;
+}
+
+.type-page-title {
+  font-size: var(--type-page-title);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.type-hero {
+  font-size: var(--type-hero);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes modal-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Chat panel ───────────────────────────────────────────────────────────
+   The dock animates its width so the page content slides over rather than
+   snapping; the panel inside keeps a fixed width and fades in, so its layout
+   never reflows mid-animation. */
+:root {
+  --chat-panel-w: 380px;
+  /* Wider when it floats. The dock has to leave a twelve-column table its width,
+     which is what holds 380 down; the overlay takes nothing from the page, and
+     the runs it carries — a waterfall, a chart, a receipt — were being read in a
+     column narrow enough to wrap every label. */
+  --chat-panel-overlay-w: 470px;
+}
+
+@keyframes chat-dock-in {
+  from { width: 0; }
+  to { width: var(--chat-panel-w); }
+}
+@keyframes chat-dock-out {
+  from { width: var(--chat-panel-w); }
+  to { width: 0; }
+}
+@keyframes chat-panel-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes chat-panel-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(12px); }
+}
+
+.chat-dock-in {
+  animation: chat-dock-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.chat-dock-out {
+  animation: chat-dock-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+.chat-panel-in {
+  animation: chat-panel-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.chat-panel-out {
+  animation: chat-panel-out 160ms ease-in both;
+}
+
+/* The agent's thinking indicator between a question and its answer. Three dots
+   lifting in sequence — the reduced-motion block below stills them. */
+@keyframes chat-typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30%           { opacity: 1;   transform: translateY(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── DataTable edge padding ───────────────────────────────────────────────
+   The DS applies `cellPaddingX` as an inline style on data cells but nothing
+   at all on leading/trailing slot columns, so the serial-number column sat
+   flush against the card edge. Inset the outer edges of every table so the
+   first and last columns breathe. Inline styles beat plain classes, hence
+   the !important. */
+.dt-table th:first-child,
+.dt-table td:first-child {
+  padding-left: 20px !important;
+}
+.dt-table th:last-child,
+.dt-table td:last-child {
+  padding-right: 20px !important;
+}
+
+/* ── Light-lock ───────────────────────────────────────────────────────────
+   This app is light-only. @navanta-ai/design-system ships
+   prefers-color-scheme:dark variants (e.g. DialogFooter's dark:bg-zinc-950).
+   On a dark-mode OS those flip DS surfaces dark while the app's own light
+   tokens stay light — an inconsistent half-dark UI. Neutralize the DS dark
+   backgrounds / borders / text back to light values so the app renders
+   identically regardless of the visitor's OS theme. */
+@media (prefers-color-scheme: dark) {
+  .dark\:bg-zinc-950        { background-color: #f9f9f9 !important; }
+  .dark\:bg-muted           { background-color: #f4f4f5 !important; }
+  .dark\:bg-blue-950        { background-color: #eff6ff !important; }
+  .dark\:bg-green-950       { background-color: #f0fdf4 !important; }
+  .dark\:bg-red-950         { background-color: #fef2f2 !important; }
+  .dark\:bg-yellow-950      { background-color: #fefce8 !important; }
+  .dark\:bg-destructive\/20 { background-color: #fef2f2 !important; }
+  .dark\:bg-success\/20     { background-color: #f0fdf4 !important; }
+  .dark\:border-blue-800    { border-color: #bfdbfe !important; }
+  .dark\:border-green-800   { border-color: #bbf7d0 !important; }
+  .dark\:border-red-800     { border-color: #fecaca !important; }
+  .dark\:border-yellow-800  { border-color: #fef08a !important; }
+  .dark\:text-blue-200      { color: #1e40af !important; }
+  .dark\:text-green-200     { color: #166534 !important; }
+  .dark\:text-red-200       { color: #991b1b !important; }
+  .dark\:text-yellow-200    { color: #854d0e !important; }
+  .dark\:text-success       { color: #15803d !important; }
+  .dark\:text-foreground    { color: #18181b !important; }
+}
+
+/* A TableShell used purely as tab chrome. The DS always draws its pager
+   footer; on a panel that is a thread or a four-line list there is nothing to
+   page, and "1–4 of 4" under it reads as a table pretending to be bigger than
+   it is. Scoped to the opt-in class so every real table keeps its footer. */
+.ts-no-pager > div:last-child {
+  display: none;
+}
+
+/* TableShell draws its toolbar above the tab bar, which reads as "search, then
+   choose what you are searching" — backwards, since the tabs decide which list
+   the field even applies to. The shell root is a flex column, so reordering is
+   a rule rather than a fork of the component.
+
+   Every child is numbered, not just the two being swapped: `order` sorts
+   against a default of 0, so ordering a pair alone sends them BEHIND the
+   siblings that were never given a number. */
+.ts-search-below > div:nth-child(1) {
+  order: 1;
+}
+.ts-search-below > div:nth-child(3) {
+  order: 2;
+}
+.ts-search-below > div:nth-child(2) {
+  order: 3;
+}
+.ts-search-below > div:nth-child(4) {
+  order: 4;
+}
+.ts-search-below > div:nth-child(5) {
+  order: 5;
+}
+
+/* A TableShell's tab row scrolls sideways rather than clipping. Five tabs fit
+   the eight-column record panel; a sixth silently lost its label off the right
+   edge, which is worse than a scrollbar because the reader has no way to know
+   the tab is there. `hide-scrollbar` keeps the bar itself out of the layout —
+   the overflow is discoverable by dragging, which is how a tab strip behaves
+   everywhere else. */
+.ts-scroll-tabs [role="tablist"] {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ts-scroll-tabs [role="tablist"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* The truck on a lane map nudges while the load is moving. Small and slow — it
+   marks "in transit" as a live state rather than animating for its own sake. */
+@keyframes lane-truck-nudge {
+  0%, 100% { transform: translateX(-1px); }
+  50% { transform: translateX(1px); }
+}
+.lane-truck {
+  animation: lane-truck-nudge 2.4s ease-in-out infinite;
+}
+
+/* The detail panel's left edge.
+
+   The design system paints it in the brand purple, which reads as a status
+   accent — the colour this app uses for the agent and nothing else. On a
+   product peek nothing is being flagged, so the stripe was claiming a meaning
+   the panel does not have. The border stays (it is what keeps the rounded edge
+   crisp against the scrim) and goes the same subtle grey as every other edge.
+
+   Written here rather than passed in because DetailPanelShell takes no
+   className and portals itself to the body, so there is no wrapper to scope it
+   with. */
+div.fixed.z-\[95\] {
+  border-left-color: var(--border-subtle, #e4e4e7);
+}
+
+/* The active-filter chip row inside a TableShell.
+
+   The design system gives it `px-4 pb-3` and no top padding, so a chip sits
+   flush against the search row above it — the strip reads as attached to the
+   search box rather than as its own line of state. One rule rather than a prop,
+   because the row is rendered inside the shell and takes nothing from us.
+
+   Matched by the remove button every chip carries, which is what makes the row
+   this row and not another flex-wrap container. */
+div:has(> span > button[aria-label^="Remove "]) {
+  padding-top: 10px;
+}
+
+/* Right-align every cell but the first, on a row that is all figures.
+   Done in CSS rather than by threading an align prop into each cell: the rule is
+   about the row, and eight cells each carrying the same style object is eight
+   places for it to drift. */
+.exec-row-right > *:not(:first-child) {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* The image-search button sits beside the search field, not at the far edge.
+   TableShell's filter slot carries ml-auto, which pushes whatever is in it to the
+   right of the toolbar — right for a row of filter dropdowns, wrong here, where
+   the button is the same question the field beside it asks. The gap is the
+   toolbar's own 12px plus 12 more, so the two controls read as a pair. */
+.ts-search-adjacent .ml-auto {
+  margin-left: 12px;
+}

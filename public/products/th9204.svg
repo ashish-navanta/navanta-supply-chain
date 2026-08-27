@@ -1,0 +1,6 @@
+<!-- Quick-Dry Bath Rug — drawn product illustration for the demo catalogue. Vector, scales to any size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="160" height="160" role="img" aria-label="Quick-Dry Bath Rug">
+<rect width="32" height="32" rx="2.4" fill="#F1EFEB"/>
+  <path d="M7 11.5h18l2 13.5H5Z" fill="#2E3238" stroke="#1e2124" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M9.4 14.5h13.2M8.6 18.5h14.8M7.8 22.2h16.4" stroke="#6d7074" stroke-width="1" opacity="0.5" stroke-dasharray="1.6 2.2"/>
+</svg>

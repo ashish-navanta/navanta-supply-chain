@@ -1,0 +1,8 @@
+<!-- Stoneware Dinnerware Set — drawn product illustration for the demo catalogue. Vector, scales to any size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="160" height="160" role="img" aria-label="Stoneware Dinnerware Set">
+<rect width="32" height="32" rx="2.4" fill="#F1EFEB"/>
+  <ellipse cx="16" cy="23" rx="11" ry="3.4" fill="#B76E58" stroke="#774839" stroke-width="1"/>
+  <ellipse cx="16" cy="19.5" rx="9" ry="2.9" fill="#cd9a8a" stroke="#774839" stroke-width="0.9"/>
+  <path d="M9.5 15.5a6.5 3 0 0 0 13 0v-3.2a6.5 4.6 0 0 1-13 0Z" fill="#B76E58" stroke="#774839" stroke-width="1"/>
+  <ellipse cx="16" cy="12.2" rx="6.5" ry="2.4" fill="#cd9a8a" stroke="#774839" stroke-width="0.9"/>
+</svg>

@@ -1,0 +1,8 @@
+<!-- Performance Bath Towel — drawn product illustration for the demo catalogue. Vector, scales to any size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="160" height="160" role="img" aria-label="Performance Bath Towel">
+<rect width="32" height="32" rx="2.4" fill="#F1EFEB"/>
+  <rect x="6.5" y="16" width="19" height="9" rx="2.4" fill="#C08A3E" stroke="#7d5a28" stroke-width="1"/>
+  <path d="M8.5 19h15M8.5 22h15" stroke="#7d5a28" stroke-width="0.7" opacity="0.45"/>
+  <circle cx="16" cy="11.2" r="5" fill="#d3ad78" stroke="#7d5a28" stroke-width="1"/>
+  <path d="M16 11.2a3 3 0 0 1 3-3" stroke="#7d5a28" stroke-width="0.9" fill="none"/>
+</svg>

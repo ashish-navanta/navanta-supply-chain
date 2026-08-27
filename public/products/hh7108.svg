@@ -1,0 +1,8 @@
+<!-- Chunky Knit Throw Blanket — drawn product illustration for the demo catalogue. Vector, scales to any size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="160" height="160" role="img" aria-label="Chunky Knit Throw Blanket">
+<rect width="32" height="32" rx="2.4" fill="#F1EFEB"/>
+  <rect x="6" y="10" width="20" height="5.5" rx="2" fill="#d9bd93" stroke="#836942" stroke-width="0.9"/>
+  <rect x="6" y="15" width="20" height="5.5" rx="2" fill="#C9A165" stroke="#836942" stroke-width="0.9"/>
+  <rect x="6" y="20" width="20" height="5.5" rx="2" fill="#ab8956" stroke="#836942" stroke-width="0.9"/>
+  <path d="M8 12.5h16M8 17.5h16M8 22.5h16" stroke="#836942" stroke-width="0.7" opacity="0.4"/>
+</svg>

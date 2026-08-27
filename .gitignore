@@ -1,0 +1,68 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.pem
+
+# editor / IDE
+.vscode/
+.idea/
+.fleet/
+*.swp
+*.swo
+*~
+
+# claude code — per-user permissions, do not share
+.claude/settings.local.json
+.claude/launch.json
+
+# local backups — not part of the project
+/.backups
+
+# build / cache
+.turbo/
+.cache/
+
+# logs (broader than the debug-specific lines below)
+*.log
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Session-scoped local backup used during redesign work.
+.backup/

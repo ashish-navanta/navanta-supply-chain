@@ -1,0 +1,345 @@
+/* ═══════════════════════════════════════════════════════════════
+ *  Navanta Supply Chain — Design Tokens
+ *  Single source of truth for color, typography, elevation, and gradients.
+ *  Brand: Navanta blue #1D4A86 → purple #3D348B (iris layer below)
+ *  Usage:  var(--token-name)  or  text-[var(--token-name)]
+ * ═══════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ─── TEXT COLORS ────────────────────────────────────────────── */
+  --text-primary:        #18181b;   /* Main body text, headings               */
+  --text-secondary:      #71717a;   /* Labels, helper text, icons             */
+  --text-muted:          #97979F;   /* Disabled, placeholder, tertiary info   */
+  --link-color:          #005B89;   /* Links, functional text                 */
+  --text-accent-dark:    #0f172a;   /* Button text, icon accent               */
+  --text-inverse:        #ffffff;   /* Text on dark/gradient backgrounds      */
+  --text-inverse-muted:  #cccccc;   /* Muted text on dark backgrounds         */
+
+  /* Status text */
+  --text-success:        #047753;   /* Success inline text                    */
+  --text-success-vivid:  #10b981;   /* Success icons, progress indicators     */
+  --text-success-dark:   #09573D;   /* Text on success-light backgrounds      */
+  --text-danger:         #D82323;   /* Error, validation, critical            */
+  --text-danger-vivid:   #ef4444;   /* Bright error (badges, required *)      */
+  --text-danger-muted:   #991b1b;   /* Dull red (urgent "days ago", delayed)  */
+  --text-warning:        #d97706;   /* Amber warnings                         */
+  --text-warning-dark:   #92400e;   /* Text on warning-light backgrounds      */
+  --text-info:           #3b82f6;   /* Informational blue                     */
+
+  /* ─── CONTAINER / SURFACE COLORS ─────────────────────────────── */
+  --surface-page:        #f1f5f9;   /* Page background                        */
+  --surface-base:        #ffffff;   /* Cards, panels, modals                  */
+  /* The frame around the work — nav rail, top bar, agent panel. White, so the
+     chrome reads as one continuous surface and only the page between them
+     carries a tint. Tried at #fafafa and taken back: two near-identical greys
+     either side of the page read as a rendering fault rather than a decision. */
+  --surface-chrome:      #ffffff;
+  --surface-raised:      #f8fafc;   /* Slightly elevated sections, insets     */
+  --surface-sunken:      #f0f2f5;   /* Tab bars, footer bars, section bg      */
+  --surface-hover:       #f1f5f9;   /* Generic hover state                    */
+  --surface-neutral:     #f5f5f5;   /* Dividers, menu headers                 */
+  --surface-accent:      #f2f7f9;   /* Primary hover tint (buttons, rows)     */
+  --surface-accent-hover:#edf4f7;   /* Deeper primary hover tint              */
+  --surface-icon-accent: #ccdee7;   /* Icon circle backgrounds (primary)      */
+
+  /* Status surfaces */
+  --surface-success:     #ecfdf5;   /* Success background (badges, rows)      */
+  --surface-success-alt: #e0f6ef;   /* Alternate green tint                   */
+  --surface-danger:      #fef2f2;   /* Error/danger background                */
+  --surface-danger-alt:  #fce7e7;   /* Stronger danger tint (badges)          */
+  --surface-warning:     #fef3c7;   /* Warning/caution background             */
+  --surface-info:        #f0f7fb;   /* Info/teal tint background              */
+
+  /* ─── BORDER COLORS ──────────────────────────────────────────── */
+  --border-light:        #F0F2F5;   /* Subtle dividers, table rows            */
+  --border-default:      #e4e4e7;   /* Standard border (cards, inputs, rows)  */
+  --border-strong:       #d4d4d8;   /* Heavier borders (active inputs)        */
+  --border-focus:        #18181b;   /* Input focus ring border                */
+  --border-accent:       #d9e6ed;   /* Subtle teal-tinted dividers            */
+  --sidebar-active-bg:   #edf4f7;   /* Sidebar active item background          */
+  --sidebar-hover-bg:    #f5f5f5;   /* Sidebar hover item background           */
+  --sidebar-active-fill: #002537;   /* Sidebar active icon/text color          */
+  --brand-logo-default:  block;     /* Show default logo                       */
+  --brand-logo-custom:   none;      /* Hide custom logo                        */
+  --border-success:      #bbf7d0;   /* Success state borders                  */
+  --border-danger:       #ffa2a2;   /* Error state borders                    */
+
+  /* ─── BRAND / ACCENT ─────────────────────────────────────────── */
+  --brand-primary:       #005B89;   /* Primary brand teal                     */
+  --brand-primary-dark:  #00476a;   /* Darker primary (gradient start)        */
+  --brand-primary-hover: #003956;   /* Hover state dark teal                  */
+  --brand-purple:        #005B89;   /* Alias for brand-primary (unified)      */
+  --brand-purple-hover:  #003956;   /* Hover state (same as primary-hover)    */
+  --brand-purple-deep:   #002537;   /* Deep accent teal (sidebar, badges)     */
+  --brand-navy:          #003956;   /* Darkest teal accent                    */
+  --tab-active-border:   var(--text-primary); /* Active tab underline          */
+
+  /* ─── TYPOGRAPHY SCALE ────────────────────────────────────────── */
+  --type-badge:          10px;      /* Small badge counts, pill numbers       */
+  --type-overline:       11px;      /* Uppercase section labels               */
+  --type-caption:        12px;      /* Timestamps, helper text                */
+  --type-cell:           13px;      /* Table cells, compact body              */
+  --type-body:           14px;      /* Default body text, inputs, buttons     */
+  --type-stat:           15px;      /* KPI stat values                        */
+  --type-subheading:     16px;      /* Card section headers                   */
+  --type-title:          18px;      /* Modal titles, section titles            */
+  --type-page-title:     20px;      /* Page section titles                    */
+  --type-hero:           22px;      /* Primary headings, hero gradient text   */
+
+  /* ─── LABEL / CHIP TOKENS ────────────────────────────────────── */
+  --label-primary-bg:          #005B89;  /* Primary label/chip background          */
+  --label-primary-text:        #ffffff;  /* Primary label/chip text                */
+
+  /* ─── BUTTON TOKENS ──────────────────────────────────────────── */
+
+  /* Primary (neutral dark CTA) */
+  --btn-primary-bg:            linear-gradient(113deg, #18181b 1.6%, #3e3e48 98.4%);
+  --btn-primary-bg-hover:      linear-gradient(113deg, #0f0f11 1.6%, #2c2c35 98.4%);
+  --btn-primary-text:          var(--text-inverse);
+  --btn-primary-disabled-bg:   var(--border-default);
+  --btn-primary-disabled-text: var(--text-secondary);
+
+  /* Iris / AI button — locked to Navanta purple, never changes with brand */
+  --btn-ai-bg:                 linear-gradient(155deg, rgba(255,255,255,0) 67%, #fff 156%), linear-gradient(119deg, #1d4a86 -2%, #3d348b 83%);
+  --btn-ai-bg-hover:           linear-gradient(155deg, rgba(255,255,255,0) 67%, #fff 156%), linear-gradient(119deg, #163a6b -2%, #2a2365 83%);
+
+  /* Secondary (outlined) */
+  --btn-secondary-bg:        #ffffff;
+  --btn-secondary-border:    #e2e8f0;
+  --btn-secondary-text:      #0f172a;
+  --btn-secondary-hover-bg:  #f2f7f9;
+  --btn-secondary-hover-border:#cbd5e1;
+
+  /* Ghost (transparent, border on hover only) */
+  --btn-ghost-bg:            transparent;
+  --btn-ghost-text:          var(--ds-text-primary);
+  --btn-ghost-hover-bg:      var(--ds-surface-active);
+
+  /* Gradient decorative (text gradient, badge gradient) */
+  --gradient-brand:      linear-gradient(135deg, #00476a 0%, #005B89 50%);
+  --gradient-badge:      #0f172a;
+  /* The agent-summary action band — Figma W&B node 1865:11067. */
+  --gradient-agent-band: linear-gradient(to right, #EBDFFF 72.227%, #F3ECFE 100%);
+  --gradient-iris:    linear-gradient(155deg, rgba(255,255,255,0) 67%, #fff 156%),
+                         linear-gradient(119deg, #1d4a86 -2%, #3d348b 83%);
+  --gradient-section:    linear-gradient(135deg, #00476a 0%, #005B89 100%);
+  /* Page background — a soft warm-grey wash over white. */
+  /* Navanta's signature content ground — the Customer Ops blue sweep. */
+  --gradient-page-bg:    linear-gradient(130deg, #D9E2F9 28.38%, #C1CFF3 74.14%);
+  --gradient-section-light: linear-gradient(135deg, #edf4f7 0%, #ccdee7 100%);
+
+  /* Progress bar gradients */
+  --gradient-progress-green: linear-gradient(to right, rgba(16,185,129,0.4), rgba(16,185,129,0.4) 70%, #10b981);
+  --gradient-progress-amber: linear-gradient(to right, rgba(245,158,11,0.4), rgba(245,158,11,0.4) 70%, #f59e0b);
+  --gradient-progress-red:   linear-gradient(to right, rgba(222,16,16,0.4), rgba(222,16,16,0.4) 70%, #de1010);
+  --gradient-progress-blue:  linear-gradient(to right, rgba(0,91,137,0.4), rgba(0,71,106,0.4) 70%, #005B89);
+
+  /* ─── SHADOW / ELEVATION ─────────────────────────────────────── */
+  --shadow-card:         0 0 1px 0 rgba(0, 0, 0, 0.25), 0 1px 2px 0 rgba(10, 24, 48, 0.08);
+  --shadow-card-subtle:  0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(10, 24, 48, 0.08);
+  --shadow-sm:           0 1px 4px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md:           0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  --shadow-dropdown:     0px 4px 15px 0px rgba(0, 0, 0, 0.25);
+  --shadow-modal:        0 24px 48px rgba(0, 0, 0, 0.2);
+  --shadow-panel:        2px 0px 4px 0px rgba(0, 0, 0, 0.12);
+  --shadow-panel-light:  4px 0px 4px 0px rgba(0, 0, 0, 0.08);
+  --shadow-menu:         0px 1px 2px rgba(0, 0, 0, 0.04), 0px 1px 8.2px rgba(0, 0, 0, 0.08);
+  --shadow-focus:        0 0 0 3px rgba(15, 23, 42, 0.1);
+  --shadow-focus-ring:   0 0 0 2px var(--brand-purple-deep);
+
+  /* ═══════════════════════════════════════════════════════════════
+   *  DESIGN SYSTEM TOKENS — Figma Mode 1 (source of truth)
+   *  Added ahead of component migration. Component-level tokens above
+   *  will be rewired to point here in a subsequent pass.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  /* ─── Typography (Geist) ─────────────────────────────────────── */
+  --ds-font-family: var(--font-geist-sans), "Geist", system-ui, sans-serif;
+  /* Weights: Regular 400 · Medium 500 · SemiBold 600 · Bold 700 */
+
+  /* ─── Color · Neutral (zinc) ─────────────────────────────────── */
+  --color-neutral-50:  #FAFAFA;
+  --color-neutral-100: #F4F4F5;
+  --color-neutral-200: #E4E4E7;
+  --color-neutral-300: #D4D4D8;
+  --color-neutral-400: #A1A1AB;
+  --color-neutral-500: #71717B;
+  --color-neutral-600: #52525C;
+  --color-neutral-700: #3F3F47;
+  --color-neutral-800: #27272A;
+  --color-neutral-900: #18181B;
+
+  /* ─── Color · Success (green) ────────────────────────────────── */
+  --color-success-50:  #ECFEF3;
+  --color-success-100: #D4FDE5;
+  --color-success-200: #AAF9CD;
+  --color-success-300: #56F2A6;
+  --color-success-400: #00E275;
+  --color-success-500: #00C94E;
+  --color-success-600: #00A63D;
+  --color-success-700: #008234;
+  --color-success-800: #00672E;
+  --color-success-900: #005529;
+
+  /* ─── Color · Warning (orange/amber) ─────────────────────────── */
+  --color-warning-50:  #FFFBEA;
+  --color-warning-100: #FFF3C2;
+  --color-warning-200: #FFE57B;
+  --color-warning-300: #FFD217;
+  --color-warning-400: #FFBC00;
+  --color-warning-500: #FF9900;
+  --color-warning-600: #E87000;
+  --color-warning-700: #C24C00;
+  --color-warning-800: #9E3900;
+  --color-warning-900: #823000;
+
+  /* ─── Color · Destructive (red) ──────────────────────────────── */
+  --color-destructive-50:  #FFF1F2;
+  --color-destructive-100: #FFDEDD;
+  --color-destructive-200: #FFC7C9;
+  --color-destructive-300: #FFA0A3;
+  --color-destructive-400: #FE6266;
+  --color-destructive-500: #FF2B3A;
+  --color-destructive-600: #F0000F;
+  --color-destructive-700: #CA0005;
+  --color-destructive-800: #A7000F;
+  --color-destructive-900: #8B0A18;
+
+  /* ─── Color · Info (blue — houses #005B89 as Info 800) ───────── */
+  --color-info-50:  #F0F9FF;
+  --color-info-100: #DCF3FF;
+  --color-info-200: #AEE8FF;
+  --color-info-300: #5BD6FF;
+  --color-info-400: #00C0FF;
+  --color-info-500: #00A7EF;
+  --color-info-600: #0087CE;
+  --color-info-700: #006BA7;
+  --color-info-800: #005B89;
+  --color-info-900: #004B71;
+
+  /* ─── Color · Order (domain accent) ─────────────────────────── */
+  --color-order-import:    #4e40bb;   /* Import order avatar badge              */
+
+  /* ─── Color · Iris (purple — Iris AI scale) ──────────── */
+  --color-iris-50:  #F7F2FF;
+  --color-iris-100: #F1E6FF;
+  --color-iris-200: #DECDFF;
+  --color-iris-300: #C8ABFF;
+  --color-iris-400: #AB83FB;
+  --color-iris-500: #8C5DE1;
+  --color-iris-600: #6A3EBD;
+  --color-iris-700: #59349C;
+  --color-iris-800: #492A7E;
+  --color-iris-900: #3A2263;
+
+  /* ─── Iris / AI Gradient (EXCLUSIVE to Iris buttons) ───── */
+  --ds-gradient-iris:
+    linear-gradient(155deg, rgba(255,255,255,0) 67.02%, #FFF 155.58%),
+    linear-gradient(119deg, #1D4A86 -1.66%, #3D348B 83.4%);
+  --ds-gradient-iris-hover:
+    linear-gradient(155deg, rgba(255,255,255,0) 67.02%, #FFF 155.58%),
+    linear-gradient(119deg, #153664 -1.66%, #2B2566 83.4%);
+
+  /* ─── Semantic · Surface Foundations ─────────────────────────── */
+  --ds-surface-white:      #FFFFFF;                   /* Cards, modals (base)      */
+  --ds-surface-grey:       var(--color-neutral-50);   /* #FAFAFA · Page bg         */
+  --ds-surface-brand:      var(--color-iris-50);     /* #F7F2FF · AI/brand wells  */
+  --ds-surface-active:     var(--color-neutral-100);  /* #F4F4F5 · Sidebar/nav bg  */
+  --ds-surface-secondary:  var(--color-neutral-400);  /* #A1A1AB · Inactive tabs   */
+  --ds-surface-inverse:    var(--color-neutral-900);  /* #18181B · Tooltip bg      */
+
+  /* ─── Semantic · Content — Typography ────────────────────────── */
+  --ds-text-primary:       var(--color-neutral-900);  /* #18181B · Headings, body  */
+  --ds-text-secondary:     var(--color-neutral-600);  /* #52525C · Labels, caption */
+  --ds-text-placeholder:   var(--color-neutral-400);  /* #A1A1AB · Input hints     */
+  --ds-text-disabled:      var(--color-neutral-300);  /* #D4D4D8 · Locked text     */
+  --ds-text-on-brand:      var(--color-neutral-50);   /* #FAFAFA · On brand bg     */
+
+  /* ─── Semantic · Content — Iconography ───────────────────────── */
+  --ds-icon-primary:       var(--color-neutral-900);  /* #18181B · Nav, CTA icons  */
+  --ds-icon-secondary:     var(--color-neutral-600);  /* #52525C · Supporting      */
+  --ds-icon-tertiary:      var(--color-neutral-400);  /* #A1A1AB · Decorative      */
+  --ds-icon-brand:         var(--color-iris-500);    /* #8C5DE1 · Branded icons   */
+  --ds-icon-on-brand:      var(--color-neutral-50);   /* #FAFAFA · Icons on brand  */
+
+  /* ─── Semantic · Interactive Buttons ─────────────────────────── */
+  --ds-button-primary-default:    var(--color-iris-500);    /* #8C5DE1 · solid (gradient is Iris-only) */
+  --ds-button-primary-hover:      var(--color-iris-600);    /* #6A3EBD */
+  --ds-button-secondary-default:  var(--color-neutral-50);   /* #FAFAFA */
+  --ds-button-secondary-hover:    var(--color-neutral-100);  /* #F4F4F5 */
+  --ds-button-link:               var(--color-info-800);     /* #005B89 · teal — always Info 800 */
+
+  /* ─── Semantic · Feedback · Status & Alerts ──────────────────── */
+  --ds-bg-success-subtle:  var(--color-success-50);      /* #ECFEF3 */
+  --ds-icon-success:       var(--color-success-700);     /* #008234 · WCAG-AA */
+  --ds-bg-warning-subtle:  var(--color-warning-50);      /* #FFFBEA */
+  --ds-icon-warning:       var(--color-warning-800);     /* #9E3900 · high contrast */
+  --ds-bg-error-subtle:    var(--color-destructive-50);  /* #FFF1F2 */
+  --ds-icon-error:         var(--color-destructive-800); /* #A7000F */
+  --ds-bg-info-subtle:     var(--color-info-50);         /* #F0F9FF */
+  --ds-icon-info:          var(--color-info-800);        /* #005B89 */
+
+  /* ─── Semantic · Boundaries — Borders ────────────────────────── */
+  --ds-border-light:       var(--color-neutral-100);  /* #F4F4F5 · Table row separators */
+  --ds-border-subtle:      var(--color-neutral-200);  /* #E4E4E7 · Dividers        */
+  --ds-border-default:     var(--color-neutral-300);  /* #D4D4D8 · Standard border */
+  --ds-border-strong:      var(--color-neutral-500);  /* #71717B · Focused inputs  */
+  --ds-border-interactive: var(--color-iris-500);    /* #8C5DE1 · Selected/active */
+
+  /* ═══════════════════════════════════════════════════════════════
+   *  LEGACY TOKEN REWIRES
+   *  Existing component-level tokens now point at the DS layer.
+   *  This flips the whole app to the new palette without touching
+   *  component files. Remaining hardcoded hex values need a grep.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  /* Text */
+  --text-secondary:      var(--ds-text-secondary);   /* was #71717a */
+  --text-muted:          var(--ds-text-placeholder); /* was #97979F */
+  --link-color:          var(--ds-button-link);      /* was #005B89 teal → #0087CE */
+
+  /* Surfaces */
+  /* --surface-page intentionally NOT rewired — keeps existing page bg #f1f5f9 */
+  --surface-sunken:      var(--ds-surface-active);   /* was #f0f2f5 */
+  --surface-hover:       var(--ds-surface-active);   /* was #f1f5f9 */
+  --surface-neutral:     var(--ds-surface-active);   /* was #f5f5f5 */
+  --surface-accent:      var(--ds-surface-brand);    /* was teal #f2f7f9 → purple */
+  --surface-accent-hover:var(--color-iris-100);     /* was #edf4f7 → purple */
+  --surface-icon-accent: var(--color-iris-200);     /* was #ccdee7 */
+
+  /* Borders */
+  --border-light:        var(--ds-border-subtle);    /* was #F0F2F5 */
+  --border-default:      var(--ds-border-default);   /* was #e4e4e7 → #D4D4D8 */
+  --border-strong:       var(--ds-border-strong);    /* was #d4d4d8 → #71717B */
+  --border-accent:       var(--color-iris-200);     /* was teal #d9e6ed */
+
+  /* Sidebar — neutral scale (not brand) */
+  --sidebar-active-bg:   var(--ds-surface-active);   /* Neutral 100 #F4F4F5 */
+  --sidebar-active-fill: var(--ds-text-primary);     /* Neutral 900 #18181B */
+
+  /* Brand */
+  --brand-primary:       var(--color-iris-500);     /* was #005B89 teal */
+  --brand-primary-dark:  var(--color-iris-600);     /* was #00476a */
+  --brand-primary-hover: var(--color-iris-700);     /* was #003956 */
+  --brand-purple:        var(--color-iris-500);
+  --brand-purple-hover:  var(--color-iris-700);
+  --brand-purple-deep:   var(--color-iris-800);     /* was #002537 */
+  --brand-navy:          var(--color-iris-700);     /* was #003956 */
+
+  /* Labels */
+  --label-primary-bg:    var(--color-iris-500);     /* was #005B89 */
+
+  /* Primary button — neutral dark gradient */
+  --btn-primary-bg:        linear-gradient(113deg, #18181b 1.6%, #3e3e48 98.4%);
+  --btn-primary-bg-hover:  linear-gradient(113deg, #0f0f11 1.6%, #2c2c35 98.4%);
+
+  /* Iris / AI button — canonical DS Iris gradient */
+  --btn-ai-bg:             var(--ds-gradient-iris);
+  --btn-ai-bg-hover:       var(--ds-gradient-iris-hover);
+
+  /* Gradients */
+  --gradient-brand:        linear-gradient(135deg, var(--color-iris-600) 0%, var(--color-iris-500) 50%);
+  --gradient-section:      linear-gradient(135deg, var(--color-iris-600) 0%, var(--color-iris-500) 100%);
+  --gradient-section-light:linear-gradient(135deg, var(--color-iris-50) 0%, var(--color-iris-200) 100%);
+}
