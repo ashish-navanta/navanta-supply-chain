@@ -254,8 +254,8 @@ aside.w-12,
   --ds-text-secondary: #52525b;
   --foreground: #18181b;
   --sidebar-hover-bg: #f5f5f5;
-  --sidebar-active-bg: #edf4f7;
-  --ds-surface-active: #edf4f7;
+  --sidebar-active-bg: #f4f4f5;
+  --ds-surface-active: #f4f4f5;
 }
 
 /* The DS's collapse handle, which straddles the boundary.

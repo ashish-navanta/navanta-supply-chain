@@ -91,7 +91,7 @@ function CompactLogo() {
       style={{
         height: 28,
         width: "auto",
-        transform: "translateX(2px)",
+        transform: "translate(2px, -8px)",
       }}
     />
   );
