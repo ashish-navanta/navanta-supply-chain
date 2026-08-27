@@ -8,7 +8,7 @@ import {
   type SideNavItem,
   type SideNavSection,
 } from "@navanta-ai/design-system";
-import { SidebarSimple, type Icon } from "@phosphor-icons/react";
+import { type Icon } from "@phosphor-icons/react";
 import { usePersona } from "@/context/PersonaContext";
 import { PERSONAS } from "@/types/persona";
 import { useActioned } from "@/lib/actioned";
@@ -82,38 +82,14 @@ function FullLogo() {
   );
 }
 
-/**
- * The collapsed rail: the name, set small.
- *
- * The monogram is a dark trapezoid at 26px, which at rail width reads as a
- * shape rather than as the brand — and the rail's other icons are all line glyphs,
- * so a filled mark sat in the row looking like a selected item. Four letters
- * say it without being mistaken for a control.
- */
-/**
- * The collapsed rail's top slot: the control that widens it.
- *
- * It held the name in four letters until the top bar took the wordmark, and
- * then held nothing — 52px of ground above the first icon, which reads as a gap
- * rather than as a decision. The expand control is what the manufacturing app
- * puts here, and it belongs to this column: a button that widens the rail
- * reads as part of the rail, and it sits above every nav icon where the eye
- * looks for it first.
- *
- * White, because the ground is near-black. The top bar keeps its own toggle, which is
- * how the panel gets closed again.
- */
-function ExpandRail({ onExpand }: { onExpand: () => void }) {
+/** The compact Navanta mark shown above the navigation icons. */
+function CompactLogo() {
   return (
-    <button
-      type="button"
-      onClick={onExpand}
-      aria-label="Expand navigation"
-      title="Expand navigation"
-      className="flex size-9 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-[var(--sidebar-hover-bg)]"
-    >
-      <SidebarSimple size={18} weight="bold" color="var(--nav-brand)" />
-    </button>
+    <img
+      src="/Navanta_Logo.svg"
+      alt="Navanta"
+      style={{ height: 28, width: "auto" }}
+    />
   );
 }
 
@@ -192,7 +168,7 @@ export function Sidebar({
         expanded={expanded}
         onExpandedChange={onExpandedChange}
         logo={<FullLogo />}
-        logoCollapsed={<ExpandRail onExpand={() => onExpandedChange(true)} />}
+        logoCollapsed={<CompactLogo />}
         user={{
           name: profile.name,
           description: profile.role,

@@ -14,6 +14,7 @@ import {
   Tag,
   TShirt,
   Warehouse,
+  SidebarSimple,
   type Icon,
 } from "@phosphor-icons/react";
 import { Breadcrumbs, Select } from "@navanta-ai/design-system";
@@ -73,11 +74,7 @@ const CATEGORY_ICON: Record<string, Icon> = {
   FirstAid,
 };
 
-/* `onToggleNav` is still accepted and deliberately unused: the portal layout
-   owns the rail's expanded state and passes its setter here, and dropping the
-   prop would mean editing that layout to remove an argument it is right to keep
-   offering. The bar simply no longer draws a control for it. */
-export default function TopBar({ onToggleNav: _onToggleNav }: { onToggleNav?: () => void }) {
+export default function TopBar({ onToggleNav }: { onToggleNav?: () => void }) {
   const {
     regionScope,
     setRegion,
@@ -129,32 +126,21 @@ export default function TopBar({ onToggleNav: _onToggleNav }: { onToggleNav?: ()
         background: "var(--surface-chrome)",
         borderBottom: "1px solid var(--ds-border-default)",
         height: 48,
-        /* Even inset now that the left edge is an icon button rather than a
-           wordmark — the 20px was there to give the logo air. */
+          /* Even inset for the navigation control and current-location trail. */
         padding: "0 16px",
       }}
     >
-      {/* Left: the wordmark, then where you are.
-          No toggle. The rail carries both halves of that control now — the
-          expand button in its collapsed top slot, and the DS's own collapse
-          handle on the expanded panel's edge — so a third control in the bar was
-          a second way to do a thing the column already offers, sitting where it
-          could not show which state it would produce.
-          The wordmark is back, and it is the navy cut, matching the
-          manufacturing app's bar — the two products share their chrome now. It
-          reads here rather than in the rail because the rail is teal at both
-          widths and its collapsed state is 48px of icons; a brand that
-          disappears when a column narrows is not carrying the brand.
-          The two-logos problem this note used to describe is solved the other
-          way round instead: the collapsed rail no longer sets the name, so there
-          is exactly one wordmark on screen at every width. */}
+      {/* Left: the navigation control, then where you are. */}
       <div className="flex items-center" style={{ gap: 8 }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/navanta-logo.svg"
-          alt="Navanta"
-          style={{ height: 18, width: "auto" }}
-        />
+        <button
+          type="button"
+          onClick={onToggleNav}
+          aria-label="Expand navigation"
+          title="Expand navigation"
+          className="flex size-8 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-[var(--sidebar-hover-bg)]"
+        >
+          <SidebarSimple size={18} weight="bold" color="var(--nav-brand)" />
+        </button>
         {/* A rule between the brand and where-you-are.
             Without it the wordmark and the first crumb read as one phrase —
             "FOSSIL Executive dashboard" — because they sit at the same size on
