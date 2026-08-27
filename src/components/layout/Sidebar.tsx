@@ -173,14 +173,9 @@ export function Sidebar({
           name: profile.name,
           description: profile.role,
           initials: profile.initials,
-          /* Tinted white, not a colour of its own.
-             Left unset, the DS avatar falls back to `--primary` — near-black —
-             which on the dark rail read as a smudge rather than as a person.
-             The same translucent white the rail already uses for hover and
-             active states: it lightens whatever the rail's exact value is, and
-             the initials the DS sets in white stay legible on top of it, which a
-             genuinely light disc would not allow. */
-          color: "rgba(255, 255, 255, 0.22)",
+           /* Solid Navanta blue keeps the white initials legible against the
+             white rail. */
+           color: "var(--nav-brand)",
         }}
         onUserClick={(from) => {
           setAnchor(from);
