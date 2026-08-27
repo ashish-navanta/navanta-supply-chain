@@ -88,7 +88,7 @@ function CompactLogo() {
     <img
       src="/Navanta_Logo.svg"
       alt="Navanta"
-      style={{ height: 28, width: "auto" }}
+      style={{ height: 28, width: "auto", transform: "translateX(2px)" }}
     />
   );
 }
