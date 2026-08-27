@@ -141,24 +141,6 @@ export default function TopBar({ onToggleNav }: { onToggleNav?: () => void }) {
         >
           <SidebarSimple size={18} weight="bold" color="var(--nav-brand)" />
         </button>
-        {/* A rule between the brand and where-you-are.
-            Without it the wordmark and the first crumb read as one phrase —
-            "FOSSIL Executive dashboard" — because they sit at the same size on
-            the same baseline with nothing but a gap between them. The rule says
-            the two are different kinds of thing: one is whose app this is, the
-            other is which page you are on. Short of the bar's full height, so
-            it separates the text rather than dividing the chrome, and
-            aria-hidden because it carries no meaning a screen reader needs —
-            the nav landmark already does that job. */}
-        <span
-          aria-hidden="true"
-          style={{
-            width: 1,
-            height: 18,
-            background: "var(--ds-border-default)",
-            flex: "none",
-          }}
-        />
         {/* The DS component rather than spans and mid-dots. The hand-rolled
             version had no nav landmark, no aria-current on the leaf and its own
             separator colour — three things the design system already decided,
