@@ -4,17 +4,33 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   Armchair,
+  Bus,
+  Buildings,
+  Circle,
+  DeviceMobile,
   Diamond,
   FirstAid,
+  Flask,
+  Funnel,
+  Gear,
   Globe,
+  Handbag,
+  Knife,
+  Lightning,
   Package,
+  Recycle,
   ShoppingCart,
+  SidebarSimple,
   SquaresFour,
+  Stack,
+  Shield,
   Storefront,
   Tag,
+  Truck,
   TShirt,
   Warehouse,
-  SidebarSimple,
+  Watch,
+  Wrench,
   type Icon,
 } from "@phosphor-icons/react";
 import { Breadcrumbs, Select } from "@navanta-ai/design-system";
@@ -34,6 +50,7 @@ import {
   useScope,
 } from "@/context/ScopeContext";
 import { BUYING_ROUTES, activeEntry } from "@/data/nav";
+import { BRAND } from "@/data/brand";
 
 /**
  * The bar above the work. The rail owns navigation and the profile; this
@@ -62,16 +79,44 @@ function CategoryGlyph({ icon }: { icon: string }) {
   );
 }
 
+/**
+ * Every glyph any pack names, in one map.
+ *
+ * The fallback is `Package`, which is silent — a name this map has not heard of
+ * renders as a generic box rather than failing, so six MRO families all arrived
+ * on screen as the same carton and the dropdown read like placeholder art. The
+ * fix is to keep this in step with the packs; the grouping is there so that a
+ * pack's row can be checked against its `catalogue.ts` at a glance.
+ */
 const CATEGORY_ICON: Record<string, Icon> = {
+  /* Shared by every pack. */
   Globe,
   SquaresFour,
   Package,
   Tag,
+  /* Fossil / Target — watches, apparel, home. */
   Armchair,
   ShoppingCart,
   TShirt,
   Diamond,
   FirstAid,
+  Watch,
+  Handbag,
+  DeviceMobile,
+  /* Allison — the product series and the end-user vocations. */
+  Wrench,
+  Gear,
+  Lightning,
+  Funnel,
+  Circle,
+  Flask,
+  Knife,
+  Stack,
+  Buildings,
+  Truck,
+  Recycle,
+  Bus,
+  Shield,
 };
 
 export default function TopBar({ onToggleNav }: { onToggleNav?: () => void }) {
@@ -354,7 +399,7 @@ export default function TopBar({ onToggleNav }: { onToggleNav?: () => void }) {
                   tell this control apart from the one beside it, and the two mean
                   genuinely different places: one is where stock is held, the
                   other is the market it is sold into. */}
-              <Select.Trigger size="sm" aria-label="State" className="w-[176px]">
+              <Select.Trigger size="sm" aria-label={BRAND.scope.placeLabel} className="w-[176px]">
                 <span
                   className="min-w-0 items-center"
                   style={{ display: "flex", gap: 7, whiteSpace: "nowrap" }}
@@ -365,14 +410,14 @@ export default function TopBar({ onToggleNav }: { onToggleNav?: () => void }) {
                     className="shrink-0"
                     style={{ color: "var(--text-secondary)" }}
                   />
-                  <Select.Value placeholder="All states" />
+                  <Select.Value placeholder={BRAND.scope.allPlaces} />
                 </span>
               </Select.Trigger>
               <Select.Content>
                 {/* All countries FIRST here, unlike the region control: a reader
                     lands on a region and works all of it, and narrowing to one
                     market is the deliberate act. */}
-                <Select.Item value={ALL_COUNTRIES}>All states</Select.Item>
+                <Select.Item value={ALL_COUNTRIES}>{BRAND.scope.allPlaces}</Select.Item>
                 {countriesInScope.map((c) => (
                   <Select.Item key={c.id} value={c.id}>
                     {c.name}

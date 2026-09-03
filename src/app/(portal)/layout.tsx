@@ -10,6 +10,7 @@ import { PersonaProvider, usePersona } from "@/context/PersonaContext";
 import { ScopeProvider } from "@/context/ScopeContext";
 import { ProductPeekProvider } from "@/context/ProductPeekContext";
 import { clientReadPersona } from "@/lib/persona";
+import { clientReadSession } from "@/lib/session";
 import { PERSONAS, type Persona } from "@/types/persona";
 import { activeEntry, seatOwning } from "@/data/nav";
 
@@ -85,6 +86,29 @@ function SeatGuard({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+/**
+ * The door has to have been opened.
+ *
+ * The session is a cookie the client reads, so — like the seat above — it is
+ * judged after mount. Nothing renders until then: the server cannot know who is
+ * signed in, and painting the portal for a frame before sending somebody to the
+ * login page would show them exactly the thing the page exists to gate.
+ */
+function SessionGuard({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (clientReadSession()) {
+      setReady(true);
+    } else {
+      router.replace("/");
+    }
+  }, [router]);
+
+  return ready ? <>{children}</> : null;
+}
+
 export default function PortalLayout({ children }: { children: ReactNode }) {
   /* Expansion is held here so the top bar's toggle and the panel's own
      collapse/backdrop stay in sync — the rail is always visible, the panel
@@ -104,6 +128,7 @@ export default function PortalLayout({ children }: { children: ReactNode }) {
           agent: Approve starts a run, the star asks Iris for a reason. Mounted
           above it, `useChatPanel` had no context and opening a peek threw. */}
       <ProductPeekProvider>
+        <SessionGuard>
         <div className="flex h-screen w-screen overflow-hidden">
           <Sidebar expanded={navExpanded} onExpandedChange={setNavExpanded} />
 
@@ -126,6 +151,7 @@ export default function PortalLayout({ children }: { children: ReactNode }) {
               its left, facing the content. */}
           <ChatPanel />
         </div>
+        </SessionGuard>
       </ProductPeekProvider>
       </ChatPanelProvider>
       </ScopeProvider>

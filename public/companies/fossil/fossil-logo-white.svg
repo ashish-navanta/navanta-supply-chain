@@ -1,0 +1,15 @@
+<!-- PLACEHOLDER WORDMARK. A typographic stand-in, not Fossil's identity —
+     swap in the real asset when it is available. White cut, for the near-black rail.
+
+     The viewBox is TIGHT to the ink and `textLength` pins the glyphs to it.
+     Both matter: this file is loaded through an <img>, which is an isolated
+     document that cannot reach the page's Geist font, so the wordmark renders
+     in whatever the OS falls back to and its natural width is unknowable
+     here. A loose viewBox therefore became dead space that width:auto
+     faithfully rendered — the logo looked padded because the box was. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 20" width="68" height="20"
+     role="img" aria-label="Fossil Group">
+  <text x="0" y="15.5" textLength="68" lengthAdjust="spacing"
+        font-family="Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="15" font-weight="600" fill="#ffffff">FOSSIL</text>
+</svg>

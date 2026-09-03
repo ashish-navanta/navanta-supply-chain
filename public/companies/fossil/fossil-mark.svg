@@ -1,0 +1,8 @@
+<!-- PLACEHOLDER MARK. Four letters at rail width, for the same reason the Shaw
+     build used them: a filled shape in a column of line glyphs reads as a
+     selected item rather than as a brand. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="26" height="26" role="img" aria-label="Fossil">
+  <text x="13" y="18" text-anchor="middle"
+        font-family="Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="11" font-weight="600" letter-spacing="0.04em" fill="#ffffff">FOSL</text>
+</svg>

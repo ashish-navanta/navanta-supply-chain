@@ -43,7 +43,8 @@ import { SkuLink } from "@/components/ui/SkuLink";
 import { QUEUES, formatUsdFull, linesFor } from "@/data/action-center";
 import { POSITIONS, tierOf, TIER_LABEL } from "@/data/planning";
 import { ORDERS, orderLines } from "@/data/service";
-import { palletQuantity, skuRecord, type CatalogueSku } from "@/data/catalogue";
+import { skuRecord, type CatalogueSku } from "@/data/catalogue";
+import { BRAND } from "@/data/brand";
 
 /**
  * One SKU, in full.
@@ -402,83 +403,45 @@ export function ProductDetailScreen({ record }: { record: CatalogueSku }) {
                   {style.fibre}
                 </Field>
               </FieldRow>
-              <FieldRow>
-                <Field icon={Hash} label="DPCI">
-                  {style.dpci}
-                </Field>
-                <Field icon={Stack} label="Case packaging">
-                  {style.spec.packaging}
-                </Field>
-              </FieldRow>
               <FieldRow last>
+                {BRAND.itemCodeLabel && style.itemCode ? (
+                  <Field icon={Hash} label={BRAND.itemCodeLabel} copy={style.itemCode}>
+                    {style.itemCode}
+                  </Field>
+                ) : (
+                  <Field icon={Stack} label={BRAND.constructionLabel}>
+                    {BRAND.constructionLabels[style.construction] ?? style.construction}
+                  </Field>
+                )}
                 <Field icon={Stack} label="Receives as">
                   {style.backing}
                 </Field>
-                <Field icon={Notepad} label="Merchandising">
-                  {style.spec.merchandising.join(", ")}
-                </Field>
               </FieldRow>
             </RecordSection>
 
-            {/* The measurements, in the fields the item-setup sheet names them
-                by. Case pack and cube are what a DC slot and a container plan
-                are arithmetic over. Units per pallet is computed from three of
-                them rather than stored — see `palletQuantity` — because it is
-                the figure a slot plan compares two items on, which makes it the
-                worst one to let drift. */}
-            <RecordSection icon={Ruler} title="Case & pallet">
-              <FieldRow>
-                <Field icon={Hash} label="Case pack">
-                  {`${style.spec.casePack} units`}
-                </Field>
-                <Field icon={Stack} label="Unit weight">
-                  {`${style.spec.unitWeight.toFixed(1)} lb`}
-                </Field>
-              </FieldRow>
-              <FieldRow>
-                <Field icon={Ruler} label="Case cube">
-                  {`${style.spec.caseCube.toFixed(1)} ft³`}
-                </Field>
-                <Field icon={Stack} label="Units / pallet">
-                  {palletQuantity(style.spec).toLocaleString()}
-                </Field>
-              </FieldRow>
-              <FieldRow last>
-                <Field icon={Ruler} label="Pallet Ti">
-                  {`${style.spec.palletTi} cases/layer`}
-                </Field>
-                <Field icon={Ruler} label="Pallet Hi">
-                  {`${style.spec.palletHi} layers`}
-                </Field>
-              </FieldRow>
-            </RecordSection>
-
-            <RecordSection icon={ShieldCheck} title="Compliance">
-              <FieldRow>
-                <Field icon={Flame} label="Origin">
-                  {style.spec.origin}
-                </Field>
-                <Field icon={Flame} label="Shelf life">
-                  {style.spec.shelfLife}
-                </Field>
-              </FieldRow>
-              <FieldRow>
-                <Field icon={Lightning} label="Hazmat">
-                  {style.spec.hazmat}
-                </Field>
-                <Field icon={ShieldCheck} label="Regulatory">
-                  {style.spec.compliance}
-                </Field>
-              </FieldRow>
-              <FieldRow last>
-                <Field icon={ShieldCheck} label="Warranty">
-                  {style.spec.warranty}
-                </Field>
-                <Field icon={Notepad} label="Certified">
-                  {style.spec.certifications.join(", ")}
-                </Field>
-              </FieldRow>
-            </RecordSection>
+            {/* The specification, in whatever fields THIS company's item sheet
+                names — the pack lays them out as titled groups and the record
+                prints them two to a row. A watch book brings gauge and movement,
+                a retail book case pack and shelf life; the screen does not know
+                the difference, which is what lets one UI serve every company. */}
+            {style.spec.groups.map((group, gi) => {
+              const pairs: (typeof group.fields)[] = [];
+              for (let i = 0; i < group.fields.length; i += 2) pairs.push(group.fields.slice(i, i + 2));
+              const icon = gi % 3 === 0 ? Ruler : gi % 3 === 1 ? Stack : ShieldCheck;
+              return (
+                <RecordSection key={group.title} icon={icon} title={group.title}>
+                  {pairs.map((pair, pi) => (
+                    <FieldRow key={pair[0].label} last={pi === pairs.length - 1}>
+                      {pair.map((f) => (
+                        <Field key={f.label} icon={Notepad} label={f.label}>
+                          {f.value}
+                        </Field>
+                      ))}
+                    </FieldRow>
+                  ))}
+                </RecordSection>
+              );
+            })}
 
             {/* Where Target has it made, from the catalogue — not from whichever
                 branches happen to be holding it today. A product is made in one

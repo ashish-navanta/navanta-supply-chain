@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 import { useRouter } from "next/navigation";
-import { Check } from "@phosphor-icons/react";
+import { Check, SignOut } from "@phosphor-icons/react";
 import { usePersona } from "@/context/PersonaContext";
+import { clientClearSession } from "@/lib/session";
 import { PERSONAS, PERSONA_ORDER, type Persona } from "@/types/persona";
 
 interface ProfileMenuProps {
@@ -147,6 +148,27 @@ export function ProfileMenu({ open, triggerRef, anchor = "rail", onClose }: Prof
           </button>
         );
       })}
+
+      <div className="w-full" style={{ height: 1, background: "var(--ds-border-subtle)", margin: "6px 0" }} />
+
+      {/* Back to the front door. Clearing the session is what makes the login
+          page mean something: without a way out, the door only ever opens. */}
+      <button
+        type="button"
+        role="menuitem"
+        onClick={() => {
+          clientClearSession();
+          onClose();
+          router.push("/");
+        }}
+        className="flex w-full items-center rounded-md text-left transition-colors hover:bg-[var(--sidebar-hover-bg)]"
+        style={{ gap: 10, padding: "6px 8px" }}
+      >
+        <SignOut size={16} weight="bold" color="var(--ds-text-secondary)" aria-hidden="true" />
+        <span className="type-body font-medium" style={{ color: "var(--ds-text-primary)" }}>
+          Sign out
+        </span>
+      </button>
     </div>
   );
 }

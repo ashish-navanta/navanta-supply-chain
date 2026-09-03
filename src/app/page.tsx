@@ -1,24 +1,39 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { PERSONAS, isPersona } from "@/types/persona";
+import { COMPANIES } from "@/companies/registry";
+import { BRAND } from "@/data/brand";
+import { LoginForm } from "@/components/launcher/LoginForm";
 
 /**
- * Each seat has its own route now — /buying, /planning, /service, /logistics —
- * so the root sends you to the one the cookie already holds rather than to a
- * generic page that then has to work out which queue you meant.
+ * The front door: sign in, choosing whose supply chain you are walking into.
  *
- * A first visit lands on the executive dashboard, as Dana, VP Supply Chain.
- * It is the one view that spans every tower, so it is the honest place for
- * somebody who has never seen this app to start — the four seats each open on
- * a queue that assumes you already know which desk you are sitting at. It is
- * also first in `PERSONA_ORDER`, and the entry point disagreeing with that
- * order was the odd thing.
- *
- * The cookie still wins where there is one: switching seat is meant to stick,
- * and sending a person back to the dashboard on every visit would undo the
- * switch they just made.
+ * The portal is one UI worn by several companies. Every seat, queue, play and
+ * agent conversation reads from a company pack, so the company chosen here
+ * decides whose products, DCs, suppliers and brands appear on every screen
+ * after it — the shell itself never changes. The active pack is the one this
+ * build resolves its data imports to; in development the form can swap it live.
  */
-export default async function Home() {
-  const persona = (await cookies()).get("navanta_persona")?.value;
-  redirect(PERSONAS[isPersona(persona) ? persona : "executive"].route);
+export default function Home() {
+  return (
+    <main
+      className="flex min-h-full flex-1 flex-col items-center justify-center"
+      style={{ background: "linear-gradient(130deg, #D9E2F9 28.38%, #C1CFF3 74.14%)", padding: 32 }}
+    >
+      <div
+        className="flex w-full flex-col"
+        style={{
+          maxWidth: 400,
+          gap: 24,
+          background: "#FFFFFF",
+          borderRadius: 16,
+          padding: 32,
+          boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06)",
+        }}
+      >
+        <div className="flex flex-col" style={{ gap: 6 }}>
+          <h1 style={{ fontSize: 20, fontWeight: 600, color: "#0F172A", margin: 0 }}>Sign in</h1>
+          <p style={{ fontSize: 13, color: "#64748B", margin: 0 }}>Choose the company whose portal you want to open.</p>
+        </div>
+        <LoginForm companies={COMPANIES} active={BRAND.id} dev={process.env.NODE_ENV !== "production"} />
+      </div>
+    </main>
+  );
 }

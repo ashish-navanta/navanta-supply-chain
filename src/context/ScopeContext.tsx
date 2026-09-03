@@ -87,12 +87,17 @@ export type SourcingRegionScope = typeof ALL_SOURCING_REGIONS | string;
 const DEFAULT_BRAND = ALL_BRANDS;
 
 /**
- * West, because the priority sheet IS the West — and because that is where
- * the exposure sits: Woodland is the first inland node behind the LA/Long
- * Beach import gateway, so port dwell, chassis shortages and peak-season
- * gate cuts all land on this one node first.
+ * The pack's priority region — where the sheet says the exposure sits.
+ *
+ * Read off the book rather than named here. This was the literal "west", which
+ * is a TARGET region id: on any other pack it matched no region, so `REGIONS`
+ * resolved to null while the scope still held the string, and the top bar
+ * printed the raw id — a control reading "west" over an Allison book that has
+ * no such region. The `priority` flag is the same one the priority sheet is
+ * drawn from, so the default now moves with the pack: west on Target, americas
+ * on Fossil, north-america on Allison.
  */
-const DEFAULT_REGION = "west";
+const DEFAULT_REGION = (REGION_LIST.find((r) => r.priority) ?? REGION_LIST[0]).id;
 
 /**
  * Every state, not one of them.
@@ -104,8 +109,19 @@ const DEFAULT_REGION = "west";
  */
 const DEFAULT_COUNTRY = ALL_COUNTRIES;
 
-/** Home & Kitchen — the larger of the two priority categories in the sheet. */
-const DEFAULT_CATEGORY = "home";
+/**
+ * The pack's first priority category — the larger book in the sheet.
+ *
+ * Derived for the same reason as `DEFAULT_REGION`, and the failure it fixes was
+ * the worse of the two: the literal "home" left `categoryById` falling back to
+ * All categories for the OBJECT while the scope string stayed "home", so the
+ * page filtered on one category and the control above it named another.
+ *
+ * All categories carries `priority` too — it is the whole book — so it is
+ * skipped here: it is the executive's default, not a seat's.
+ */
+const DEFAULT_CATEGORY =
+  (CATEGORIES.find((c) => c.priority && c.id !== ALL_CATEGORIES) ?? CATEGORIES[0]).id;
 
 interface ScopeValue {
   /**

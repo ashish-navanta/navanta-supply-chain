@@ -34,7 +34,7 @@ import { approvalTaskFor } from "@/data/planning-approval";
 import { formatUsd } from "@/data/action-center";
 import { useScope } from "@/context/ScopeContext";
 import { useChatPanel } from "@/context/ChatPanelContext";
-import { palletQuantity, skuRecord, type CatalogueSku } from "@/data/catalogue";
+import { skuRecord, type CatalogueSku } from "@/data/catalogue";
 
 /**
  * A product at a glance, over the page you were on.
@@ -352,14 +352,17 @@ export function ProductPeek({ sku, onClose }: { sku: string | null; onClose: () 
                 {style.fibre}
               </Field>
             </FieldRow>
-            <FieldRow>
-              <Field icon={Ruler} label="Case pack">
-                {`${style.spec.casePack} units · ${style.spec.caseCube.toFixed(1)} ft³`}
-              </Field>
-              <Field icon={Ruler} label="Units / pallet">
-                {palletQuantity(style.spec).toLocaleString()}
-              </Field>
-            </FieldRow>
+            {/* The two headline figures of the pack's own spec — the first group's
+                first pair, whatever this company's item sheet leads with. */}
+            {style.spec.groups[0]?.fields.length ? (
+              <FieldRow>
+                {style.spec.groups[0].fields.slice(0, 2).map((f) => (
+                  <Field key={f.label} icon={Ruler} label={f.label}>
+                    {f.value}
+                  </Field>
+                ))}
+              </FieldRow>
+            ) : null}
             <FieldRow last>
               <Field icon={Factory} label="Made at">
                 {style.plant.name}

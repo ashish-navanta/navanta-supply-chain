@@ -8,7 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "ds:vendor": "node scripts/vendor-ds.mjs",
-    "catalogue:csv": "npx tsx --tsconfig tsconfig.json scripts/catalogue-csv.ts"
+    "catalogue:csv": "npx tsx --tsconfig tsconfig.json scripts/catalogue-csv.ts",
+    "company:target": "node scripts/select-company.mjs target",
+    "company:fossil": "node scripts/select-company.mjs fossil",
+    "company:allison": "node scripts/select-company.mjs allison",
+    "dev:target": "npm run company:target && npm run dev",
+    "dev:fossil": "npm run company:fossil && npm run dev",
+    "dev:allison": "npm run company:allison && npm run dev"
   },
   "dependencies": {
     "@navanta-ai/design-system": "^0.4.27",

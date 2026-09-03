@@ -50,6 +50,21 @@ const HELD = new Map<string, number>();
 for (const p of POSITIONS) HELD.set(p.sku, (HELD.get(p.sku) ?? 0) + p.onHand);
 
 
+/**
+ * The families this book actually carries, listed the way a person would say
+ * them.
+ *
+ * Read off the catalogue rather than named in the heading: this was three
+ * hardcoded Target brand names, so every other company's catalogue announced
+ * itself as somebody else's. A one-family pack should not read "A, and"
+ * either, which is why the join is spelled out rather than done with commas.
+ */
+function familiesInBook(): string {
+  const names = [...new Set(CATALOGUE.map((s) => s.brand))];
+  if (names.length <= 1) return names[0] ?? "";
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
 export function ProductCatalogueScreen() {
   const [q, setQ] = useState("");
   /* A colour sampled from a photograph, when somebody has searched by image.
@@ -309,7 +324,7 @@ export function ProductCatalogueScreen() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <PageHeading
           title="Product catalogue"
-          subtitle={`${SKUS.length} variants across ${CATALOGUE.length} styles — Hearth & Hand with Magnolia, Good & Gather and Threshold`}
+          subtitle={`${SKUS.length} variants across ${CATALOGUE.length} styles — ${familiesInBook()}`}
         />
         {/* Built in the browser from the live catalogue rather than served as a
             file, so the download cannot be a stale copy of the book it claims to

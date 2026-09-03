@@ -15,6 +15,7 @@ import { useActioned } from "@/lib/actioned";
 import { NAV, activeEntry, type NavEntry } from "@/data/nav";
 import { QUEUES } from "@/data/action-center";
 import { ProfileMenu } from "./ProfileMenu";
+import { BRAND } from "@/data/brand";
 
 /**
  * The seat's rail. Routes live in `key` and deliberately omit `href`: SideNav
@@ -66,16 +67,19 @@ function withBadge(Glyph: Icon, value: number) {
 /* eslint-disable @next/next/no-img-element */
 
 /**
- * Full Navanta lockup — the expanded panel.
+ * The active pack's full lockup — the expanded panel.
  *
  * The full dark lockup keeps the brand visible against the white navigation
- * surface.
+ * surface. Read off `BRAND` like the compact mark beside it: this was a
+ * hardcoded "/navanta-logo.svg", which broke for every pack the day the
+ * artwork moved under `public/companies/<id>/` and left the rail showing a
+ * broken-image glyph on Allison and Fossil alike.
  */
 function FullLogo() {
   return (
     <img
-      src="/navanta-logo.svg"
-      alt="Navanta"
+      src={BRAND.logo}
+      alt={BRAND.product}
       className="px-1"
       style={{ height: 32, width: "auto" }}
     />
@@ -86,8 +90,8 @@ function FullLogo() {
 function CompactLogo() {
   return (
     <img
-      src="/Navanta_Logo.svg"
-      alt="Navanta"
+      src={BRAND.mark}
+      alt={BRAND.product}
       style={{
         height: 28,
         width: "auto",
